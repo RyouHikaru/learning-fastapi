@@ -30,6 +30,15 @@ A repository dedicated for learning FastAPI.
 
 ### Projects
 
-- Project 1 - FastAPI Request Method Logic
+- **Project 1 - FastAPI Request Method Logic**
+  - Request and Response
+  - CRUD Operations
+  - HTTP Request Methods
+- **Project 2 - Move Fast with FastAPI**
+  - Data Validation (using Pydantic V2)
+  - Exception Handling
+  - Status Codes
+  - Swagger Configuration
+  - Request Objects
 
 _List to be updated_
