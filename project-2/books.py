@@ -13,6 +13,7 @@ class Book:
     author: str
     description: str
     rating: int
+    published_date: int
 
     def __init__(self, id, title, author, description, rating, published_date) -> None:
         self.id = id
@@ -60,11 +61,26 @@ BOOKS = [
 
 @app.get("/books", status_code=status.HTTP_200_OK)
 async def read_all_books():
+    """
+    Read all books.
+
+    Returns:
+        books: All books
+    """
     return BOOKS
 
 
 @app.get("/books/{book_id}", status_code=status.HTTP_200_OK)
 async def read_book_by_id(book_id: int = Path(gt=0)):
+    """
+    Read book by ID.
+
+    Args:
+        book_id (str): ID of the book
+
+    Returns:
+        book: The book matching the ID
+    """
     for book in BOOKS:
         if book.id == book_id:
             return book
@@ -74,6 +90,15 @@ async def read_book_by_id(book_id: int = Path(gt=0)):
 
 @app.get("/books/", status_code=status.HTTP_200_OK)
 async def read_book_by_rating(book_rating: int = Query(gt=0, lt=11)):
+    """
+    Read books by rating.
+
+    Args:
+        book_rating (str): Rating of the book
+
+    Returns:
+        books_to_return: The books matching the rating
+    """
     books_to_return = []
     for book in BOOKS:
         if book.rating == book_rating:
@@ -83,6 +108,15 @@ async def read_book_by_rating(book_rating: int = Query(gt=0, lt=11)):
 
 @app.get("/books/published-date/", status_code=status.HTTP_200_OK)
 async def read_book_by_published_date(published_date: int = Query(gt=1899, lt=2024)):
+    """
+    Read books by published date.
+
+    Args:
+        published_date (str): Published date of the book
+
+    Returns:
+        books_to_return: The books matching the published date
+    """
     books_to_return = []
     for book in BOOKS:
         if book.published_date == published_date:
@@ -92,12 +126,27 @@ async def read_book_by_published_date(published_date: int = Query(gt=1899, lt=20
 
 @app.post("/create-book", status_code=status.HTTP_201_CREATED)
 async def create_book(book_request: BookRequest):
+    """
+    Add a new book.
+
+    Args:
+        book_request (BookRequest): Request for adding a book
+    """
     new_book = Book(**book_request.model_dump())
     BOOKS.append(find_book_id(new_book))
 
 
 @app.put("/books/update-book", status_code=status.HTTP_204_NO_CONTENT)
 async def update_book(book: BookRequest):
+    """
+    Update a book.
+
+    Args:
+        book (BookRequest): Request for updating a book
+
+    Raises:
+        HTTPException: Request book ID is not found
+    """
     book_changed = False
     for i in range(len(BOOKS)):
         if BOOKS[i].id == book.id:
@@ -111,6 +160,15 @@ async def update_book(book: BookRequest):
 
 @app.delete("/books/{book_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_book(book_id: int = Path(gt=0)):
+    """
+    Delete a book.
+
+    Args:
+        book_id (int): ID of book to be deleted
+
+    Raises:
+        HTTPException: Request book ID is not found
+    """
     book_changed = False
     for i in range(len(BOOKS)):
         if BOOKS[i].id == book_id:
@@ -124,5 +182,14 @@ async def delete_book(book_id: int = Path(gt=0)):
 
 
 def find_book_id(book: Book):
+    """
+    Generate unique book id.
+
+    Args:
+        book (Book): Book to be added
+
+    Returns:
+        book: Book with updated ID
+    """
     book.id = 1 if len(BOOKS) == 0 else BOOKS[-1].id + 1
     return book
