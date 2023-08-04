@@ -40,5 +40,10 @@ A repository dedicated for learning FastAPI.
   - Status Codes
   - Swagger Configuration
   - Request Objects
+- **Project 3 - Complete RESTful APIs**
+  - Full SQL Database
+  - Authentication
+  - Authorization
+  - Hashing Passwords
 
 _List to be updated_
