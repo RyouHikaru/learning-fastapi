@@ -48,6 +48,17 @@ db_dependecy = Annotated[Session, Depends(get_db)]
 
 
 def authenticate_user(username: str, password: str, db):
+    """
+    Authenticate user.
+
+    Args:
+        username (str): Username
+        password (str): Password
+        db (db_dependency): The db dependency to be injected
+
+    Returns:
+        user: The user or False if authentication fails
+    """
     user = db.query(Users).filter(Users.username == username).first()
     if not user:
         return False
@@ -57,6 +68,18 @@ def authenticate_user(username: str, password: str, db):
 
 
 def create_access_token(username: str, user_id: int, role: str, expires_delta: timedelta):
+    """
+    Generate access token.
+
+    Args:
+        username (str): Username
+        user_id (int): User ID
+        role (str): Role of user
+        expires_delta (timedelta): Expiration time of token
+
+    Returns:
+        jwt: The generated JWT
+    """
     encode = {"sub": username, "id": user_id, "role": role}
     expires = datetime.utcnow() + expires_delta
     encode.update({"exp": expires})
@@ -64,6 +87,18 @@ def create_access_token(username: str, user_id: int, role: str, expires_delta: t
 
 
 async def get_current_user(token: Annotated[str, Depends(oauth2_bearer)]):
+    """
+    Get current user from token.
+
+    Args:
+        token (Annotated[str, Depends): JWT
+
+    Raises:
+        HTTPException: The username or user is invalid or JWT is invalid
+
+    Returns:
+        user: The details of the currently logged in user
+    """
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload.get("sub")
@@ -80,6 +115,13 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_bearer)]):
 
 @router.post("/", status_code=status.HTTP_201_CREATED)
 async def create_user(db: db_dependecy, create_user_request: CreateUserRequest):
+    """
+    Add a user.
+
+    Args:
+        db (db_dependecy): The db dependency to be injected
+        create_user_request (CreateUserRequest): Request for adding a user
+    """
     create_user_model = Users(
         email=create_user_request.email,
         username=create_user_request.username,
@@ -97,6 +139,19 @@ async def create_user(db: db_dependecy, create_user_request: CreateUserRequest):
 @router.post("/token", response_model=Token)
 async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
                                  db: db_dependecy):
+    """
+    User login.
+
+    Args:
+        form_data (Annotated[OAuth2PasswordRequestForm, Depends): The form data dependency to be injected
+        db (db_dependecy): The db dependency to be injected
+
+    Raises:
+        HTTPException: The user is not found
+
+    Returns:
+        jwt: The generated JWT
+    """
     user = authenticate_user(form_data.username, form_data.password, db)
     if not user:
         raise HTTPException(

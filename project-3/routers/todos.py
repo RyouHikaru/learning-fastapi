@@ -38,6 +38,9 @@ async def read_all(user: user_dependecy, db: db_dependecy):
         user (user_dependency): The user dependency to be injected
         db (db_dependecy): The database dependency to be injected
 
+    Raises:
+        HTTPException: The user is not found
+
     Returns:
         todos: The list of todos
     """
@@ -60,7 +63,7 @@ async def read_todo_by_id(user: user_dependecy, db: db_dependecy, todo_id: int =
         todo_id (int): ID of the todo
 
     Raises:
-        HTTPException: Request todo ID is not found
+        HTTPException: The user is not found or request todo ID is not found
 
     Returns:
         todo: Todo matching the ID
@@ -85,6 +88,9 @@ async def create_todo(user: user_dependecy, db: db_dependecy, todo_request: Todo
         user (user_dependency): The user dependency to be injected
         db (db_dependecy): The database dependency to be injected
         todo_request (TodoRequest): Request to add a todo
+
+    Raises:
+        HTTPException: The user is not found
     """
     if user is None:
         raise HTTPException(
@@ -107,7 +113,7 @@ async def update_todo(user: user_dependecy, db: db_dependecy, todo_request: Todo
         todo_request (TodoRequest): Request to update a todo
 
     Raises:
-        HTTPException: Request todo ID is not found
+        HTTPException: The user is not found or request todo ID is not found
     """
     if user is None:
         raise HTTPException(
@@ -138,7 +144,7 @@ async def delete_todo(user: user_dependecy, db: db_dependecy, todo_id: int = Pat
         todo_id (int): ID of todo to be deleted
 
     Raises:
-        HTTPException: Request todo ID is not found
+        HTTPException: The user is not found or request todo ID is not found
     """
     if user is None:
         raise HTTPException(
