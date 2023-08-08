@@ -45,5 +45,8 @@ A repository dedicated for learning FastAPI.
   - Authentication
   - Authorization
   - Hashing Passwords
+- **Project 3.5 - Alembic Data Migration**
+  - Database Revisions
+  - Data Migration
 
 _List to be updated_
