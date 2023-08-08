@@ -48,5 +48,5 @@ A repository dedicated for learning FastAPI.
 - **Project 3.5 - Alembic Data Migration**
   - Database Revisions
   - Data Migration
-
-_List to be updated_
+- **Project 4 - MongoDB**
+  - NoSQL Database
